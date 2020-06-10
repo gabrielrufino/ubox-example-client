@@ -12,6 +12,7 @@ import Header from './components/Header'
 import Home from './screens/Home'
 import Login from './screens/Login'
 import Register from './screens/Register'
+import Users from './screens/Users'
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
             </Route>
             <Route path="/register">
               <Register />
+            </Route>
+            <Route path="/users">
+              <Users />
             </Route>
           </Switch>
         </div>
