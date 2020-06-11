@@ -12,6 +12,7 @@ function Register() {
     username: [],
     password: []
   })
+  const [redirect, setRedirect] = useState('')
 
   async function createUser() {
     const { REACT_APP_API_URL } = process.env
@@ -28,11 +29,13 @@ function Register() {
         headers: { 'Content-Type': 'application/json' }
       })
 
-      if (response.status === 400) {
+      if (response.ok) {
+        setRedirect('/login')
+      } else if (response.status === 400) {
         const data = await response.json()
         setErrors(data)
-      } else if (response.ok) {
-        return <Redirect to="/login" />
+      } else {
+        throw new Error()
       }
     } catch {
       alert('Unexpected error')
@@ -41,9 +44,11 @@ function Register() {
 
   return (
     <div>
+      {redirect && <Redirect to={redirect} />}
+
       <label className="label">Name</label>
       <input
-        className={`input is-medium ${errors.name.length ? 'is-danger': 'is-primary'}`}
+        className={`input is-medium ${errors.name?.length ? 'is-danger': 'is-primary'}`}
         type="text"
         placeholder="Gabriel Rufino"
         onChange={event => setName(event.target.value)}
@@ -53,7 +58,7 @@ function Register() {
 
       <label className="label">E-mail</label>
       <input
-        className={`input is-medium ${errors.email.length ? 'is-danger': 'is-primary'}`}
+        className={`input is-medium ${errors.email?.length ? 'is-danger': 'is-primary'}`}
         type="text"
         placeholder="contato@gabrielrufino.com"
         onChange={event => setEmail(event.target.value)}
@@ -63,7 +68,7 @@ function Register() {
 
       <label className="label">Username</label>
       <input
-        className={`input is-medium ${errors.username.length ? 'is-danger': 'is-primary'}`}
+        className={`input is-medium ${errors.username?.length ? 'is-danger': 'is-primary'}`}
         type="text"
         placeholder="gabrielrufino"
         onChange={event => setUsername(event.target.value)}
@@ -73,7 +78,7 @@ function Register() {
 
       <label className="label">Password</label>
       <input
-        className={`input is-medium ${errors.password.length ? 'is-danger': 'is-primary'}`}
+        className={`input is-medium ${errors.password?.length ? 'is-danger': 'is-primary'}`}
         type="password"
         placeholder="••••••••"
         onChange={event => setPassword(event.target.value)}
